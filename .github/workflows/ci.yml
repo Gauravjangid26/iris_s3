@@ -46,4 +46,4 @@ jobs:
       # Step 7: Upload all files to S3
       - name: Upload all files to S3
         run: |
-          aws s3 cp . s3://your-model-bucket/ --recursive  # Upload all files in the repo to the S3 bucket
+          aws s3 cp . s3://iriss3cicd/ --recursive  # Upload all files in the repo to the S3 bucket
