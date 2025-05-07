@@ -26,16 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirement.txt
 
-      # Step 4: Train model (assumes you have a script that trains the model)
-      - name: Train model
-        run: |
-          python src/train.py  # Assuming your training script is in the src folder
-
-      # Step 5: Save model to disk (Pickle or Joblib)
-      - name: Save model
-        run: |
-          python src/save_model.py  # Script that saves the model to 'model.pkl'
-
       # Step 6: Configure AWS CLI
       - name: Configure AWS CLI
         run: |
