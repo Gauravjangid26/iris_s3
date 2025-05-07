@@ -1,0 +1,49 @@
+name: Model Training and Upload to S3
+
+on:
+  push:
+    branches:
+      - main  # Trigger action when changes are pushed to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # GitHub runner with Ubuntu
+
+    steps:
+      # Step 1: Checkout code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Train model (assumes you have a script that trains the model)
+      - name: Train model
+        run: |
+          python src/train.py  # Assuming your training script is in the src folder
+
+      # Step 5: Save model to disk (Pickle or Joblib)
+      - name: Save model
+        run: |
+          python src/save_model.py  # Script that saves the model to 'model.pkl'
+
+      # Step 6: Configure AWS CLI
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region ${{ secrets.AWS_REGION }}
+
+      # Step 7: Upload the model to S3
+      - name: Upload model to S3
+        run: |
+          aws s3 cp model.pkl s3://your-model-bucket/model.pkl  # Change with your bucket name
